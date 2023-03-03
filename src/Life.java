@@ -6,6 +6,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.io.PrintWriter;
 import java.util.Scanner;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -31,7 +32,7 @@ public class Life extends JFrame implements ActionListener, KeyListener, MouseLi
 	 * Import and Export:
 	 * Press 'i' to import a file. Type the name of the file in the console. The files are held in the Builds folder. 
 	 * The file copies to your copied selection, so you can paste it with 'v'. 
-	 * WIP: Press 'e' to export your copied selection. 
+	 * Press 'e' to export your copied selection. 
 	 */
 	
 	// 69 alive cells in a zigzag creates two pentadecathlons
@@ -536,6 +537,29 @@ public class Life extends JFrame implements ActionListener, KeyListener, MouseLi
 		}
 		if(e.getKeyChar() == 'e' && inputting && !selecting && cellCopy.length != 0) {
 			System.out.println("What will you name the file?");
+			try {
+				String name = input.nextLine();
+				if (new File("Builds/" + name + ".txt").exists()) {
+					System.out.println("That already exists!");
+				} else if (cellSelection.length != 0 && cellSelection[0].length != 0){
+					PrintWriter writer = new PrintWriter("Builds/" + name + ".txt");
+					String line = "";
+					for (int i = 0; i < cellSelection.length; i++) {
+						line = "";
+						for (int j = 0; j < cellSelection[0].length; j++) {
+							if (cellSelection[i][j]) {
+								line += "1";
+							} else {
+								line += 0;
+							}
+						}
+						writer.println(line);
+					}
+					writer.close();
+				}
+			} catch (Exception error) {
+				System.out.println(error);
+			}
 		}
 	}
 	
